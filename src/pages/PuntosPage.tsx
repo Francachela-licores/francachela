@@ -1,10 +1,10 @@
-import { useState, useMemo } from 'react';
-import { useGoogleSheetData } from '@/hooks/useGoogleSheetData';
-import { Card, CardContent } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { SearchBar } from '@/components/SearchBar';
-import { CategorySelector } from '@/components/CategorySelector';
-import { Loader2, Star } from 'lucide-react';
+import { useState, useMemo } from "react";
+import { useGoogleSheetData } from "@/hooks/useGoogleSheetData";
+import { Card, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { SearchBar } from "@/components/SearchBar";
+import { CategorySelector } from "@/components/CategorySelector";
+import { Loader2, Star } from "lucide-react";
 import {
   Pagination,
   PaginationContent,
@@ -12,21 +12,22 @@ import {
   PaginationLink,
   PaginationNext,
   PaginationPrevious,
-} from '@/components/ui/pagination';
+} from "@/components/ui/pagination";
+import { getVisiblePages } from "@/lib/paginationUtils";
 
 const ITEMS_PER_PAGE = 9;
-const SHOW_PRICES = import.meta.env.VITE_SHOW_PRICES !== 'false';
-const SHOW_POINTS = import.meta.env.VITE_SHOW_POINTS !== 'false';
+const SHOW_PRICES = import.meta.env.VITE_SHOW_PRICES !== "false";
+const SHOW_POINTS = import.meta.env.VITE_SHOW_POINTS !== "false";
 
 const PuntosPage = () => {
-  const { data: puntos, loading, error } = useGoogleSheetData('puntos');
-  const [searchTerm, setSearchTerm] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('all');
+  const { data: puntos, loading, error } = useGoogleSheetData("puntos");
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("all");
   const [currentPage, setCurrentPage] = useState(1);
 
   const categories = useMemo(() => {
     const cats = puntos
-      .map(p => p.categoria)
+      .map((p) => p.categoria)
       .filter((cat): cat is string => Boolean(cat));
     return Array.from(new Set(cats));
   }, [puntos]);
@@ -37,7 +38,7 @@ const PuntosPage = () => {
         .toLowerCase()
         .includes(searchTerm.toLowerCase());
       const matchesCategory =
-        selectedCategory === 'all' || punto.categoria === selectedCategory;
+        selectedCategory === "all" || punto.categoria === selectedCategory;
       return matchesSearch && matchesCategory;
     });
   }, [puntos, searchTerm, selectedCategory]);
@@ -96,21 +97,25 @@ const PuntosPage = () => {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {paginatedPuntos.map((punto) => (
-            <Card key={punto.id} className="overflow-hidden hover:shadow-lg transition-shadow duration-300">
-              <div className="aspect-square overflow-hidden bg-muted">
+            <Card
+              key={punto.id}
+              className="overflow-hidden hover:shadow-lg transition-shadow duration-300"
+            >
+              <div className="aspect-square overflow-hidden bg-muted flex items-center justify-center">
                 <img
-                  src={punto.imagen || 'https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?w=400&h=400&fit=crop'}
+                  src={
+                    punto.imagen ||
+                    "https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?w=400&h=400&fit=crop"
+                  }
                   alt={punto.nombre}
-                  className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+                  className="h-full p-2 flex object-cover hover:scale-105 transition-transform duration-300"
                 />
               </div>
               <CardContent className="p-4 space-y-3">
                 <div>
                   <h3 className="font-bold text-lg mb-2">{punto.nombre}</h3>
                   {punto.categoria && (
-                    <Badge variant="secondary">
-                      {punto.categoria}
-                    </Badge>
+                    <Badge variant="secondary">{punto.categoria}</Badge>
                   )}
                 </div>
 
@@ -147,27 +152,43 @@ const PuntosPage = () => {
             <PaginationContent>
               <PaginationItem>
                 <PaginationPrevious
-                  onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
-                  className={currentPage === 1 ? 'pointer-events-none opacity-50' : 'cursor-pointer'}
+                  onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+                  className={
+                    currentPage === 1
+                      ? "pointer-events-none opacity-50"
+                      : "cursor-pointer"
+                  }
                 />
               </PaginationItem>
-              
-              {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
-                <PaginationItem key={page}>
-                  <PaginationLink
-                    onClick={() => setCurrentPage(page)}
-                    isActive={currentPage === page}
-                    className="cursor-pointer"
-                  >
-                    {page}
-                  </PaginationLink>
-                </PaginationItem>
-              ))}
-              
+
+              {getVisiblePages(currentPage, totalPages, 5).map(
+                (page, index) => (
+                  <PaginationItem key={`${page}-${index}`}>
+                    {page === -1 ? (
+                      <span className="px-3 py-2">...</span>
+                    ) : (
+                      <PaginationLink
+                        onClick={() => setCurrentPage(page)}
+                        isActive={currentPage === page}
+                        className="cursor-pointer"
+                      >
+                        {page}
+                      </PaginationLink>
+                    )}
+                  </PaginationItem>
+                )
+              )}
+
               <PaginationItem>
                 <PaginationNext
-                  onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
-                  className={currentPage === totalPages ? 'pointer-events-none opacity-50' : 'cursor-pointer'}
+                  onClick={() =>
+                    setCurrentPage((p) => Math.min(totalPages, p + 1))
+                  }
+                  className={
+                    currentPage === totalPages
+                      ? "pointer-events-none opacity-50"
+                      : "cursor-pointer"
+                  }
                 />
               </PaginationItem>
             </PaginationContent>

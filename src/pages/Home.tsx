@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { Wine, Gift, BookOpen, Star } from 'lucide-react';
+import { Wine, Gift, BookOpen, Star, Facebook, Instagram, MessageCircleMore } from 'lucide-react';
+import logoFrancachela from '../assets/icons/logoFrancachelaPurple.png'
 
 const Home = () => {
   return (
@@ -9,13 +10,14 @@ const Home = () => {
       <section className="relative py-20 px-4 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-primary/20 via-background to-accent/20" />
         <div className="container mx-auto relative z-10">
-          <div className="max-w-3xl mx-auto text-center space-y-8">
-            <h1 className="text-5xl md:text-6xl font-bold leading-tight">
+          <div className="max-w-3xl mx-auto text-center space-y-8 ">
+            <h1 className="text-5xl md:text-6xl font-bold leading-tight text-center">
               Bienvenido a{' '}
-              <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+              {/* <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
                 Francachela
-              </span>
+              </span> */}
             </h1>
+              <img src={logoFrancachela} alt="Francachela" className="mx-auto p-5 h-32 sm:h-40 md:h-48 lg:h-56 xl:h-64 object-contain" />
             <p className="text-xl text-muted-foreground">
               Tu tienda premium de bebidas y cócteles. Descubre los mejores productos, 
               combos exclusivos y recetas para tus celebraciones.
@@ -102,6 +104,36 @@ const Home = () => {
           </div>
         </div>
       </section>
+      <footer className="fixed bottom-0 left-0 w-full bg-background border-t py-3 md:hidden">
+    <div className="flex justify-center gap-6 text-primary">
+      <a
+        href="https://www.facebook.com/share/1ADbyoHvRa/"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Facebook"
+      >
+        <Facebook className="h-6 w-6 hover:text-accent transition-colors" />
+      </a>
+
+      <a
+        href="https://www.instagram.com/licoreria_francachela?igsh=MW9pcDVlaG1tbmJ1Mg=="
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Instagram"
+      >
+        <Instagram className="h-6 w-6 hover:text-accent transition-colors" />
+      </a>
+
+      <a
+        href="https://wa.me/51951756070"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="WhatsApp"
+      >
+        <MessageCircleMore className="h-6 w-6 hover:text-accent transition-colors" />
+      </a>
+    </div>
+  </footer>
     </div>
   );
 };
