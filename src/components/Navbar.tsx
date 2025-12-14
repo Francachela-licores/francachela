@@ -10,7 +10,7 @@ export const Navbar = () => {
     { path: '/', label: 'Inicio' },
     { path: '/productos', label: 'Productos' },
     { path: '/combos', label: 'Combos' },
-    { path: '/puntos', label: 'Puntos' },
+    // { path: '/puntos', label: 'Puntos' },
     { path: '/recetario', label: 'Recetario' },
     { path: '/contacto', label: 'Contacto' },
   ];
